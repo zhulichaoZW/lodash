@@ -18,10 +18,10 @@ const rsBreakRange = rsMathOpRange + rsNonCharRange + rsPunctuationRange + rsSpa
 const rsApos = "['\u2019]"
 const rsBreak = `[${rsBreakRange}]`
 const rsCombo = `[${rsComboRange}]`
-const rsDigits = '\\d+'
+const rsDigit = '\\d'
 const rsDingbat = `[${rsDingbatRange}]`
 const rsLower = `[${rsLowerRange}]`
-const rsMisc = `[^${rsAstralRange}${rsBreakRange + rsDigits + rsDingbatRange + rsLowerRange + rsUpperRange}]`
+const rsMisc = `[^${rsAstralRange}${rsBreakRange + rsDigit + rsDingbatRange + rsLowerRange + rsUpperRange}]`
 const rsFitz = '\\ud83c[\\udffb-\\udfff]'
 const rsModifier = `(?:${rsCombo}|${rsFitz})`
 const rsNonAstral = `[^${rsAstralRange}]`
@@ -38,8 +38,8 @@ const rsOptContrUpper = `(?:${rsApos}(?:D|LL|M|RE|S|T|VE))?`
 const reOptMod = `${rsModifier}?`
 const rsOptVar = `[${rsVarRange}]?`
 const rsOptJoin = `(?:${rsZWJ}(?:${[rsNonAstral, rsRegional, rsSurrPair].join('|')})${rsOptVar + reOptMod})*`
-const rsOrdLower = '\\d*(?:(?:1st|2nd|3rd|(?![123])\\dth)\\b)'
-const rsOrdUpper = '\\d*(?:(?:1ST|2ND|3RD|(?![123])\\dTH)\\b)'
+const rsOrdLower = '\\d*(?:1st|2nd|3rd|(?![123])\\dth)(?=\\b|[A-Z_])'
+const rsOrdUpper = '\\d*(?:1ST|2ND|3RD|(?![123])\\dTH)(?=\\b|[a-z_])'
 const rsSeq = rsOptVar + reOptMod + rsOptJoin
 const rsEmoji = `(?:${[rsDingbat, rsRegional, rsSurrPair].join('|')})${rsSeq}`
 
@@ -57,7 +57,7 @@ const unicodeWords = RegExp.prototype.exec.bind(RegExp([
   `${rsUpper}+${rsOptContrUpper}`,
   rsOrdUpper,
   rsOrdLower,
-  rsDigits,
+  `${rsDigit}+`,
   rsEmoji
 ].join('|'), 'g'))
 
